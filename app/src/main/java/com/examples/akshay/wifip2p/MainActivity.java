@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         buttonReceive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ReceiveDataTask receiveDataTask = new ReceiveDataTask(getApplicationContext());
+                ReceiveDataTask receiveDataTask = new ReceiveDataTask(getApplicationContext(), serverSocket);
                 receiveDataTask.execute();
             }
         });
