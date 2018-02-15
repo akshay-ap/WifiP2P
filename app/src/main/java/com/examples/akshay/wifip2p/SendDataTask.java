@@ -43,6 +43,7 @@ public class SendDataTask extends AsyncTask {
     public void sendData()
     {
 
+
         String host = "192.168.49.1";
         String data = "===========";
         int port = 8888;

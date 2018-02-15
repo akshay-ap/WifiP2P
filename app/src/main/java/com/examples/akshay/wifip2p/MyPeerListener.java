@@ -15,9 +15,19 @@ import java.util.List;
 public class MyPeerListener implements WifiP2pManager.PeerListListener {
     public static final String TAG = "===MyPeerListener";
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+    public MainActivity mainActivity;
+
+    public MyPeerListener(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        Log.d(MyPeerListener.TAG,"Peer object created");
+
+    }
+
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+
+        ArrayList<WifiP2pDevice> deviceDetails = new ArrayList<>();
 
         Log.d(MyPeerListener.TAG, "OnPeerAvailable()");
         if(wifiP2pDeviceList != null ) {
@@ -28,12 +38,13 @@ public class MyPeerListener implements WifiP2pManager.PeerListListener {
             }
             Log.d(MainActivity.TAG,"");
             for (WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()) {
-                if(device.deviceName.equals(MainActivity.DEVICE_TO_SEARCH)) {
-                    MainActivity.device = device;
-                } else {
-                    Log.d(MyPeerListener.TAG, "Found device :" + device.deviceName + " " + device.deviceAddress);
-                }
+                deviceDetails.add(device);
+                Log.d(MyPeerListener.TAG, "Found device :" + device.deviceName + " " + device.deviceAddress);
             }
+            if(mainActivity != null) {
+                mainActivity.setDeviceList(deviceDetails);
+            }
+
         }
         else {
             Log.d(MyPeerListener.TAG, "wifiP2pDeviceList is null");
