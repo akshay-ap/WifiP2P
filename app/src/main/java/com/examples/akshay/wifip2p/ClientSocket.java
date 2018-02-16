@@ -19,14 +19,17 @@ import java.net.Socket;
  */
 
 public class ClientSocket extends AsyncTask{
-    String data = "This is a recieved string";
+    private static String data;
     private static final String TAG = "===ClientSocket";
     private Socket socket;
-    private Context context;
+    //private Context context;
     //private MainActivity activity;
-    public ClientSocket(Context context, MainActivity activity) {
-        this.context = context;
-    //    this.activity= activity;
+    public ClientSocket(Context context, MainActivity activity,String data1) {
+        //this.context = context;
+        if(data1 != null)
+        {data = data1;
+        } else data = "null data";
+    //this.activity= activity;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class ClientSocket extends AsyncTask{
              * of the socket. This data will be retrieved by the server device.
              */
             OutputStream outputStream = socket.getOutputStream();
-            ContentResolver cr = context.getContentResolver();
+            //ContentResolver cr = context.getContentResolver();
             InputStream inputStream = null;
             inputStream = new ByteArrayInputStream(data.getBytes());
 

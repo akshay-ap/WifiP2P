@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonClientStop;
     Button buttonServerStop;
     Button buttonConfigure;
+    EditText editTextTextInput;
 
     ServiceDiscovery serviceDisvcoery;
 
@@ -112,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewReceivedData = findViewById(R.id.main_acitivity_data);
         textViewReceivedDataStatus = findViewById(R.id.main_acitivity_received_data);
 
+        editTextTextInput = findViewById(R.id.main_acitivity_input_text);
+
         buttonServerStart.setOnClickListener(this);
         buttonServerStop.setOnClickListener(this);
         buttonClientStart.setOnClickListener(this);
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonClientStart.setVisibility(View.INVISIBLE);
         buttonServerStop.setVisibility(View.INVISIBLE);
         buttonServerStart.setVisibility(View.INVISIBLE);
-
+        editTextTextInput.setVisibility(View.INVISIBLE);
         textViewReceivedDataStatus.setVisibility(View.INVISIBLE);
         textViewReceivedData.setVisibility(View.INVISIBLE);
 
@@ -217,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSuccess() {
                 Log.d(MainActivity.TAG, "Connected to :" + device.deviceName);
                 Toast.makeText(getApplication(),"Connection successful with " + device.deviceName,Toast.LENGTH_SHORT).show();
-                setDeviceList(new ArrayList<WifiP2pDevice>());
+                //setDeviceList(new ArrayList<WifiP2pDevice>());
             }
 
             @Override
@@ -334,7 +338,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_activity_button_client_start:
                 //serviceDisvcoery.startRegistrationAndDiscovery(mManager,mChannel);
-                ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
+                String dataToSend = editTextTextInput.getText().toString();
+                ClientSocket clientSocket = new ClientSocket(MainActivity.this,this,dataToSend);
                 clientSocket.execute();
                 break;
             case R.id.main_activity_button_configure:
@@ -350,30 +355,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
-        makeToast("Am I group owner : " + String.valueOf(wifiP2pInfo.isGroupOwner));
         String hostAddress= wifiP2pInfo.groupOwnerAddress.getHostAddress();
         if (hostAddress == null) hostAddress= "host is null";
 
-        makeToast(hostAddress);
+        //makeToast("Am I group owner : " + String.valueOf(wifiP2pInfo.isGroupOwner));
+        //makeToast(hostAddress);
         Log.d(MainActivity.TAG,"wifiP2pInfo.groupOwnerAddress.getHostAddress() " + wifiP2pInfo.groupOwnerAddress.getHostAddress());
         IP = wifiP2pInfo.groupOwnerAddress.getHostAddress();
         IS_OWNER = wifiP2pInfo.isGroupOwner;
 
         if(IS_OWNER) {
-            buttonClientStop.setVisibility(View.INVISIBLE);
-            buttonClientStart.setVisibility(View.INVISIBLE);
+            buttonClientStop.setVisibility(View.GONE);
+            buttonClientStart.setVisibility(View.GONE);
+            editTextTextInput.setVisibility(View.GONE);
+
             buttonServerStop.setVisibility(View.VISIBLE);
             buttonServerStart.setVisibility(View.VISIBLE);
 
             textViewReceivedData.setVisibility(View.VISIBLE);
             textViewReceivedDataStatus.setVisibility(View.VISIBLE);
         } else {
-            buttonClientStop.setVisibility(View.VISIBLE);
+            //buttonClientStop.setVisibility(View.VISIBLE);
             buttonClientStart.setVisibility(View.VISIBLE);
-            buttonServerStop.setVisibility(View.INVISIBLE);
-            buttonServerStart.setVisibility(View.INVISIBLE);
-            textViewReceivedData.setVisibility(View.INVISIBLE);
-            textViewReceivedDataStatus.setVisibility(View.INVISIBLE);
+            editTextTextInput.setVisibility(View.VISIBLE);
+            buttonServerStop.setVisibility(View.GONE);
+            buttonServerStart.setVisibility(View.GONE);
+            textViewReceivedData.setVisibility(View.GONE);
+            textViewReceivedDataStatus.setVisibility(View.GONE);
         }
 
         makeToast("Configuration Completed");
