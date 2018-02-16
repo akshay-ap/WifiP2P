@@ -45,7 +45,7 @@ public class ClientSocket extends AsyncTask{
 
     public void sendData()
     {
-        String host = "192.168.49.180";
+        String host = MainActivity.IP;
         int port = 8888;
         int len;
         Socket socket = new Socket();

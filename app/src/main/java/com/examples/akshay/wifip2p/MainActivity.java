@@ -5,7 +5,10 @@ import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,WifiP2pManager.ConnectionInfoListener {
     public static final String TAG = "===MainActivity";
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
@@ -40,10 +45,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView textViewDiscoveryStatus;
     TextView textViewWifiP2PStatus;
     TextView textViewConnectionStatus;
-    public static String ip = "192.16.49.180";
-    boolean stateDiscovery = false;
-    boolean stateWifi = false;
-    boolean stateConnection = false;
+    public static String IP = null;
+    public static boolean IS_OWNER = false;
+
+    static boolean  stateDiscovery = false;
+    static boolean stateWifi = false;
+    public static boolean stateConnection = false;
 
     ServerSocketThread serverSocketThread;
 
@@ -302,19 +309,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Log.d(MainActivity.TAG,"serverSocketThread is null");
                 }
-
-
                 //makeToast("Yet to do...");
                 break;
             case R.id.main_activity_button_client_start:
-                ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
-                clientSocket.execute();
+                //ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
+                //clientSocket.execute();
                 break;
             case R.id.main_activity_button_client_stop:
-                makeToast("Yet to do...");
+                mManager.requestConnectionInfo(mChannel,this);
                 break;
             default:
                 break;
         }
     }
+
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+        makeToast("Am I group owner : " + String.valueOf(wifiP2pInfo.isGroupOwner));
+        makeToast(wifiP2pInfo.groupOwnerAddress.getHostAddress());
+        Log.d(MainActivity.TAG,"wifiP2pInfo.groupOwnerAddress.getHostAddress() " + wifiP2pInfo.groupOwnerAddress.getHostAddress());
+        IP = wifiP2pInfo.groupOwnerAddress.getHostAddress();
+        IS_OWNER = wifiP2pInfo.isGroupOwner;
+    }
+
 }

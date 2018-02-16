@@ -19,7 +19,7 @@ public class MyPeerListener implements WifiP2pManager.PeerListListener {
 
     public MyPeerListener(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        Log.d(MyPeerListener.TAG,"Peer object created");
+        Log.d(MyPeerListener.TAG,"MyPeerListener object created");
 
     }
 

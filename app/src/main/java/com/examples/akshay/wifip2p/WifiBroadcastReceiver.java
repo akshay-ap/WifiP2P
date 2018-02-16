@@ -56,15 +56,15 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             }
             NetworkInfo networkInfo = intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-            WifiP2pInfo p2pInfo = intent
-                    .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
+            //WifiP2pInfo p2pInfo = intent
+            //        .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
 
-            if (p2pInfo != null && p2pInfo.groupOwnerAddress != null) {
-                String goAddress = Utils.getDottedDecimalIP(p2pInfo.groupOwnerAddress
-                        .getAddress());
-                boolean isGroupOwner = p2pInfo.isGroupOwner;
-                Log.d(WifiBroadcastReceiver.TAG,"I am a group owner");
-            }
+            //if (p2pInfo != null && p2pInfo.groupOwnerAddress != null) {
+            //    String goAddress = Utils.getDottedDecimalIP(p2pInfo.groupOwnerAddress
+            //            .getAddress());
+            //    boolean isGroupOwner = p2pInfo.isGroupOwner;
+           //     Log.d(WifiBroadcastReceiver.TAG,"I am a group owner");
+           // }
             if (networkInfo.isConnected()) {
                 mActivity.setStatusView(Constants.NETWORK_CONNECT);
                 // we are connected with the other device, request connection
@@ -79,8 +79,6 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             Log.d(WifiBroadcastReceiver.TAG,"WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
-
-
             // Respond to this device's wifi state changing
 
 
