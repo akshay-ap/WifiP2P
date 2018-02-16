@@ -62,22 +62,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/main_activity_button_server"
+            android:id="@+id/main_activity_button_server_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Server" />
+            android:text="Server start" />
 
         <Button
-            android:id="@+id/main_activity_button_client"
+            android:id="@+id/main_activity_button_server_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Client" />
+            android:text="Server stop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/main_activity_button_client_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Client Start" />
+
+        <Button
+            android:id="@+id/main_activity_button_client_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Client Stop" />
     </LinearLayout>
 
 </LinearLayout>

@@ -31,8 +31,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonDiscoveryStart;
     Button buttonDiscoveryStop;
     Button buttonConnect;
-    Button buttonServer;
-    Button buttonClient;
+    Button buttonServerStart;
+    Button buttonClientStart;
+    Button buttonClientStop;
+    Button buttonServerStop;
+
     ListView listViewDevices;
     TextView textViewDiscoveryStatus;
     TextView textViewWifiP2PStatus;
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean stateDiscovery = false;
     boolean stateWifi = false;
     boolean stateConnection = false;
+
+    ServerSocketThread serverSocketThread;
 
     ArrayAdapter mAdapter;
     WifiP2pDevice[] deviceListItems;
@@ -85,8 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonDiscoveryStart = findViewById(R.id.main_activity_button_discover_start);
         buttonDiscoveryStop = findViewById(R.id.main_activity_button_discover_stop);
         buttonConnect = findViewById(R.id.main_activity_button_connect);
-        buttonServer = findViewById(R.id.main_activity_button_server);
-        buttonClient = findViewById(R.id.main_activity_button_client);
+        buttonServerStart = findViewById(R.id.main_activity_button_server_start);
+        buttonServerStop = findViewById(R.id.main_activity_button_server_stop);
+        buttonClientStart = findViewById(R.id.main_activity_button_client_start);
+        buttonClientStop = findViewById(R.id.main_activity_button_client_stop);
 
         listViewDevices = findViewById(R.id.main_activity_list_view_devices);
         textViewConnectionStatus = findViewById(R.id.main_activiy_textView_connection_status);
@@ -102,8 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        buttonClient.setOnClickListener(this);
-        buttonServer.setOnClickListener(this);
+        buttonServerStart.setOnClickListener(this);
+        buttonServerStop.setOnClickListener(this);
+        buttonClientStart.setOnClickListener(this);
+        buttonClientStop.setOnClickListener(this);
         buttonConnect.setOnClickListener(this);
         buttonDiscoveryStop.setOnClickListener(this);
         buttonDiscoveryStart.setOnClickListener(this);
@@ -282,10 +291,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 connect(device);
                 break;
-            case R.id.main_activity_button_server:
+            case R.id.main_activity_button_server_start:
+                serverSocketThread = new ServerSocketThread();
+                serverSocketThread.execute();
+                break;
+            case R.id.main_activity_button_server_stop:
+                if(serverSocketThread == null) {
+                    serverSocketThread.close();
+                } else {
+                    Log.d(MainActivity.TAG,"serverSocketThread is null");
+                }
+                //makeToast("Yet to do...");
+                break;
+            case R.id.main_activity_button_client_start:
                 makeToast("Yet to do...");
                 break;
-            case R.id.main_activity_button_client:
+            case R.id.main_activity_button_client_stop:
                 makeToast("Yet to do...");
                 break;
             default:
