@@ -48,7 +48,7 @@ public class ClientSocket extends AsyncTask{
         String host = MainActivity.IP;
         int port = 8888;
         int len;
-        Socket socket = new Socket();
+        socket = new Socket();
         byte buf[]  = new byte[1024];
 
         try {
@@ -104,13 +104,21 @@ public class ClientSocket extends AsyncTask{
     }
 
 
-    public void connect(){
+    public class sendDataTask extends AsyncTask{
 
+        private String toSend;
+        public sendDataTask(String data) {
+            toSend = data;
+        }
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            sendString();
+            return null;
+        }
+
+        private void sendString(){
+
+        }
     }
-
-    public void disconnect(){
-
-    }
-
 
 }

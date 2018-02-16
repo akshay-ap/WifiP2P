@@ -27,18 +27,27 @@
         android:layout_height="wrap_content"
         android:text="Status" />
 
-    <Button
-        android:id="@+id/main_activity_button_discover_start"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="START DISCOVERY" />
+        android:orientation="horizontal">
 
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/main_activity_button_discover_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START DISCOVERY" />
 
-    <Button
-        android:id="@+id/main_activity_button_discover_stop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="STOP DISCOVERY" />
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/main_activity_button_discover_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STOP DISCOVERY" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/main_activity_button_connect"
@@ -85,6 +94,17 @@
             android:layout_weight="1"
             android:text="Server stop" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/main_acitivity_received_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Received Data" />
+
+    <TextView
+        android:id="@+id/main_acitivity_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

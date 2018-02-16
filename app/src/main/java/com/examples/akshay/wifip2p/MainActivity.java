@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView textViewDiscoveryStatus;
     TextView textViewWifiP2PStatus;
     TextView textViewConnectionStatus;
+    TextView textViewReceivedData;
+    TextView textViewReceivedDataStatus;
     public static String IP = null;
     public static boolean IS_OWNER = false;
 
@@ -107,15 +109,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewConnectionStatus = findViewById(R.id.main_activiy_textView_connection_status);
         textViewDiscoveryStatus = findViewById(R.id.main_activiy_textView_dicovery_status);
         textViewWifiP2PStatus = findViewById(R.id.main_activiy_textView_wifi_p2p_status);
-
-
-        listViewDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            device = deviceListItems[i];
-            Toast.makeText(MainActivity.this,"Selected device :"+ device.deviceName ,Toast.LENGTH_SHORT).show();
-            }
-        });
+        textViewReceivedData = findViewById(R.id.main_acitivity_data);
+        textViewReceivedDataStatus = findViewById(R.id.main_acitivity_received_data);
 
         buttonServerStart.setOnClickListener(this);
         buttonServerStop.setOnClickListener(this);
@@ -130,6 +125,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonClientStart.setVisibility(View.INVISIBLE);
         buttonServerStop.setVisibility(View.INVISIBLE);
         buttonServerStart.setVisibility(View.INVISIBLE);
+
+        textViewReceivedDataStatus.setVisibility(View.INVISIBLE);
+        textViewReceivedData.setVisibility(View.INVISIBLE);
+
+
+        listViewDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            device = deviceListItems[i];
+            Toast.makeText(MainActivity.this,"Selected device :"+ device.deviceName ,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
     }
 
     private void discoverPeers()
@@ -306,6 +317,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_activity_button_server_start:
                 serverSocketThread = new ServerSocketThread();
+                serverSocketThread. setUpdateListener(new ServerSocketThread.OnUpdateListener() {
+                    public void onUpdate(String obj) {
+                        setReceivedText(obj);
+                    }
+                });
                 serverSocketThread.execute();
                 break;
             case R.id.main_activity_button_server_stop:
@@ -348,14 +364,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             buttonClientStart.setVisibility(View.INVISIBLE);
             buttonServerStop.setVisibility(View.VISIBLE);
             buttonServerStart.setVisibility(View.VISIBLE);
+
+            textViewReceivedData.setVisibility(View.VISIBLE);
+            textViewReceivedDataStatus.setVisibility(View.VISIBLE);
         } else {
             buttonClientStop.setVisibility(View.VISIBLE);
             buttonClientStart.setVisibility(View.VISIBLE);
             buttonServerStop.setVisibility(View.INVISIBLE);
             buttonServerStart.setVisibility(View.INVISIBLE);
+            textViewReceivedData.setVisibility(View.INVISIBLE);
+            textViewReceivedDataStatus.setVisibility(View.INVISIBLE);
         }
 
         makeToast("Configuration Completed");
     }
 
+    public void setReceivedText(final String data) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewReceivedData.setText(data);
+            }
+        });
+    }
 }

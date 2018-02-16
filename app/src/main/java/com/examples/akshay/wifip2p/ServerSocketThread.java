@@ -3,6 +3,7 @@ package com.examples.akshay.wifip2p;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -16,18 +17,28 @@ import java.net.Socket;
  * Created by ash on 16/2/18.
  */
 
-public class ServerSocketThread extends AsyncTask<Void,Void,Void> {
+public class ServerSocketThread extends AsyncTask {
 
     private static final String TAG = "===ServerSocketThread";
     ServerSocket serverSocket;
     String receivedData = "null";
     private int port = 8888;
     private boolean interrupted = false;
+    OnUpdateListener listener;
+
     public ServerSocketThread() {
     }
 
+    public interface OnUpdateListener {
+        public void onUpdate(String data);
+    }
+
+    public void setUpdateListener(OnUpdateListener listener) {
+        this.listener = listener;
+    }
+
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Void doInBackground(Object[] objects) {
         try {
 
             Log.d(ServerSocketThread.TAG," started DoInBackground");
@@ -47,6 +58,11 @@ public class ServerSocketThread extends AsyncTask<Void,Void,Void> {
                 bufferedReader.close();
                 Log.d(ServerSocketThread.TAG,"Completed ReceiveDataTask");
                 receivedData = sb.toString();
+
+                if (listener != null) {
+                    listener.onUpdate(receivedData);
+                }
+
                 Log.d(ServerSocketThread.TAG," ================ " + receivedData);
             }
             serverSocket.close();
