@@ -7,8 +7,6 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,WifiP2pManager.ConnectionInfoListener {
@@ -40,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonClientStart;
     Button buttonClientStop;
     Button buttonServerStop;
+    Button buttonConfigure;
+
+    ServiceDiscovery serviceDisvcoery;
 
     ListView listViewDevices;
     TextView textViewDiscoveryStatus;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        serviceDisvcoery = new ServiceDiscovery();
         setUpUI();
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonServerStop = findViewById(R.id.main_activity_button_server_stop);
         buttonClientStart = findViewById(R.id.main_activity_button_client_start);
         buttonClientStop = findViewById(R.id.main_activity_button_client_stop);
-
+        buttonConfigure = findViewById(R.id.main_activity_button_configure);
         listViewDevices = findViewById(R.id.main_activity_list_view_devices);
         textViewConnectionStatus = findViewById(R.id.main_activiy_textView_connection_status);
         textViewDiscoveryStatus = findViewById(R.id.main_activiy_textView_dicovery_status);
@@ -124,7 +124,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonConnect.setOnClickListener(this);
         buttonDiscoveryStop.setOnClickListener(this);
         buttonDiscoveryStart.setOnClickListener(this);
+        buttonConfigure.setOnClickListener(this);
 
+        buttonClientStop.setVisibility(View.INVISIBLE);
+        buttonClientStart.setVisibility(View.INVISIBLE);
+        buttonServerStop.setVisibility(View.INVISIBLE);
+        buttonServerStart.setVisibility(View.INVISIBLE);
     }
 
     private void discoverPeers()
@@ -312,11 +317,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //makeToast("Yet to do...");
                 break;
             case R.id.main_activity_button_client_start:
-                //ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
-                //clientSocket.execute();
+                //serviceDisvcoery.startRegistrationAndDiscovery(mManager,mChannel);
+                ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
+                clientSocket.execute();
+                break;
+            case R.id.main_activity_button_configure:
+                mManager.requestConnectionInfo(mChannel,this);
                 break;
             case R.id.main_activity_button_client_stop:
-                mManager.requestConnectionInfo(mChannel,this);
+                makeToast("Yet to do");
                 break;
             default:
                 break;
@@ -326,10 +335,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
         makeToast("Am I group owner : " + String.valueOf(wifiP2pInfo.isGroupOwner));
-        makeToast(wifiP2pInfo.groupOwnerAddress.getHostAddress());
+        String hostAddress= wifiP2pInfo.groupOwnerAddress.getHostAddress();
+        if (hostAddress == null) hostAddress= "host is null";
+
+        makeToast(hostAddress);
         Log.d(MainActivity.TAG,"wifiP2pInfo.groupOwnerAddress.getHostAddress() " + wifiP2pInfo.groupOwnerAddress.getHostAddress());
         IP = wifiP2pInfo.groupOwnerAddress.getHostAddress();
         IS_OWNER = wifiP2pInfo.isGroupOwner;
+
+        if(IS_OWNER) {
+            buttonClientStop.setVisibility(View.INVISIBLE);
+            buttonClientStart.setVisibility(View.INVISIBLE);
+            buttonServerStop.setVisibility(View.VISIBLE);
+            buttonServerStart.setVisibility(View.VISIBLE);
+        } else {
+            buttonClientStop.setVisibility(View.VISIBLE);
+            buttonClientStart.setVisibility(View.VISIBLE);
+            buttonServerStop.setVisibility(View.INVISIBLE);
+            buttonServerStart.setVisibility(View.INVISIBLE);
+        }
+
+        makeToast("Configuration Completed");
     }
 
 }
