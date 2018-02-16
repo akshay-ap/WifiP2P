@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonDiscoveryStart;
     Button buttonDiscoveryStop;
     Button buttonConnect;
+    Button buttonServer;
+    Button buttonClient;
     ListView listViewDevices;
     TextView textViewDiscoveryStatus;
     TextView textViewWifiP2PStatus;
@@ -83,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonDiscoveryStart = findViewById(R.id.main_activity_button_discover_start);
         buttonDiscoveryStop = findViewById(R.id.main_activity_button_discover_stop);
         buttonConnect = findViewById(R.id.main_activity_button_connect);
+        buttonServer = findViewById(R.id.main_activity_button_server);
+        buttonClient = findViewById(R.id.main_activity_button_client);
+
         listViewDevices = findViewById(R.id.main_activity_list_view_devices);
         textViewConnectionStatus = findViewById(R.id.main_activiy_textView_connection_status);
         textViewDiscoveryStatus = findViewById(R.id.main_activiy_textView_dicovery_status);
@@ -97,18 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
-        buttonConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(device == null) {
-                    Toast.makeText(MainActivity.this,"Please discover and select a device",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                connect(device);
-            }
-        });
-
+        buttonClient.setOnClickListener(this);
+        buttonServer.setOnClickListener(this);
+        buttonConnect.setOnClickListener(this);
         buttonDiscoveryStop.setOnClickListener(this);
         buttonDiscoveryStart.setOnClickListener(this);
 
@@ -188,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSuccess() {
                 Log.d(MainActivity.TAG, "Connected to :" + device.deviceName);
                 Toast.makeText(getApplication(),"Connection successful with " + device.deviceName,Toast.LENGTH_SHORT).show();
+                setDeviceList(new ArrayList<WifiP2pDevice>());
             }
 
             @Override
@@ -256,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 stateConnection = false;
                 textViewConnectionStatus.setText("Disconnected");
                 makeToast("State is disconnected");
-
                 break;
             default:
                 Log.d(MainActivity.TAG,"Unknown status");
@@ -277,6 +273,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(stateDiscovery){
                     stopPeerDiscover();
                 }
+                break;
+            case R.id.main_activity_button_connect:
+
+                if(device == null) {
+                    Toast.makeText(MainActivity.this,"Please discover and select a device",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                connect(device);
+                break;
+            case R.id.main_activity_button_server:
+                makeToast("Yet to do...");
+                break;
+            case R.id.main_activity_button_client:
+                makeToast("Yet to do...");
                 break;
             default:
                 break;
