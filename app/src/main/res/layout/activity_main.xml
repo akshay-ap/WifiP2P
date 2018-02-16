@@ -8,21 +8,35 @@
 
 
     <TextView
-        android:id="@+id/main_activiy_textView_status"
+        android:id="@+id/main_activiy_textView_wifi_p2p_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="P2P Status" />
+
+    <TextView
+        android:id="@+id/main_activiy_textView_dicovery_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status" />
+
+    <TextView
+        android:id="@+id/main_activiy_textView_connection_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Status" />
 
     <Button
-        android:id="@+id/main_activity_button_discover"
+        android:id="@+id/main_activity_button_discover_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Discover" />
+        android:text="START DISCOVERY" />
 
-    <ListView
-        android:id="@+id/main_activity_list_view_devices"
+
+    <Button
+        android:id="@+id/main_activity_button_discover_stop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="STOP DISCOVERY" />
 
     <Button
         android:id="@+id/main_activity_button_connect"
@@ -30,45 +44,10 @@
         android:layout_height="wrap_content"
         android:text="Connect" />
 
-    <Button
-        android:id="@+id/main_activity_button_send"
+
+    <ListView
+        android:id="@+id/main_activity_list_view_devices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send" />
-
-
-    <Button
-        android:id="@+id/main_activity_button_receive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Receive" />
-
-    <TextView
-        android:id="@+id/main_activity_textview_owner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:text="Group Owner" />
-
-    <RadioGroup
-        android:id="@+id/main_activity_radio_group_send_receive"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/main_activity_radioButton_enumertor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Enumerator" />
-
-        <RadioButton
-            android:id="@+id/main_activity_radioButton_supervisor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SuperVisor" />
-    </RadioGroup>
+        android:layout_height="wrap_content"></ListView>
 
 </LinearLayout>

@@ -4,8 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaActionSound;
+import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by ash on 14/2/18.
@@ -38,15 +41,43 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             } else {
                 Log.d(WifiBroadcastReceiver.TAG,"WIFI P2P NOT ENABLED");
                 mActivity.setStatusView(Constants.P2P_WIFI_DISABLED);
-
             }
+
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
-                Log.d(WifiBroadcastReceiver.TAG,"Peer action changed");
-
+            Log.d(WifiBroadcastReceiver.TAG,"WIFI_P2P_PEERS_CHANGED_ACTION");
+            if (mManager != null) {
+                MyPeerListener myPeerListener = new MyPeerListener(mActivity);
+                mManager.requestPeers(mChannel, myPeerListener);
+            }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
-            // Respond to new connection or disconnections
-            Log.d(WifiBroadcastReceiver.TAG,"WIFI_P2P_CONNECTION_CHANGED_ACTION");
 
+            if (mManager == null) {
+                return;
+            }
+            NetworkInfo networkInfo = intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            WifiP2pInfo p2pInfo = intent
+                    .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
+
+            if (p2pInfo != null && p2pInfo.groupOwnerAddress != null) {
+                String goAddress = Utils.getDottedDecimalIP(p2pInfo.groupOwnerAddress
+                        .getAddress());
+                boolean isGroupOwner = p2pInfo.isGroupOwner;
+            }
+            if (networkInfo.isConnected()) {
+                Toast.makeText(context,"It's a connect",Toast.LENGTH_SHORT).show();
+                mActivity.setStatusView(Constants.NETWORK_CONNECT);
+                // we are connected with the other device, request connection
+                // info to find group owner IP
+                //mManager.requestConnectionInfo(mChannel, mActivity);
+            } else {
+                // It's a disconnect
+                Log.d(WifiBroadcastReceiver.TAG,"Its a disconnect");
+                mActivity.setStatusView(Constants.NETWORK_DISCONNECT);
+                Toast.makeText(context,"It's a disconnect",Toast.LENGTH_SHORT).show();
+
+                // activity.resetData();
+            }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             Log.d(WifiBroadcastReceiver.TAG,"WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
             // Respond to this device's wifi state changing
