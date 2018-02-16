@@ -248,12 +248,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case Constants.NETWORK_CONNECT:
                 stateConnection = true;
+                makeToast("It's a connect");
+
                 textViewConnectionStatus.setText("Connected");
                 break;
             case Constants.NETWORK_DISCONNECT:
                 stateConnection = false;
                 textViewConnectionStatus.setText("Disconnected");
-                    break;
+                makeToast("State is disconnected");
+
+                break;
             default:
                 Log.d(MainActivity.TAG,"Unknown status");
                 break;

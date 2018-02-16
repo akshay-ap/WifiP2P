@@ -63,9 +63,9 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 String goAddress = Utils.getDottedDecimalIP(p2pInfo.groupOwnerAddress
                         .getAddress());
                 boolean isGroupOwner = p2pInfo.isGroupOwner;
+                Log.d(WifiBroadcastReceiver.TAG,"I am a group owner");
             }
             if (networkInfo.isConnected()) {
-                Toast.makeText(context,"It's a connect",Toast.LENGTH_SHORT).show();
                 mActivity.setStatusView(Constants.NETWORK_CONNECT);
                 // we are connected with the other device, request connection
                 // info to find group owner IP
@@ -74,13 +74,16 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 // It's a disconnect
                 Log.d(WifiBroadcastReceiver.TAG,"Its a disconnect");
                 mActivity.setStatusView(Constants.NETWORK_DISCONNECT);
-                Toast.makeText(context,"It's a disconnect",Toast.LENGTH_SHORT).show();
 
-                // activity.resetData();
+                //activity.resetData();
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             Log.d(WifiBroadcastReceiver.TAG,"WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
+
+
             // Respond to this device's wifi state changing
+
+
         } else if(WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION.equals(action)) {
 
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_DISCOVERY_STATE, 10000);
