@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this);
 
+        serverSocketThread = new ServerSocketThread();
     }
 
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void makeToast(String msg) {
+    public void makeToast(String msg) {
         Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
     }
 
@@ -296,15 +297,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 serverSocketThread.execute();
                 break;
             case R.id.main_activity_button_server_stop:
-                if(serverSocketThread == null) {
-                    serverSocketThread.close();
+                if(serverSocketThread != null) {
+                    serverSocketThread.setInterrupted(true);
                 } else {
                     Log.d(MainActivity.TAG,"serverSocketThread is null");
                 }
+
+
                 //makeToast("Yet to do...");
                 break;
             case R.id.main_activity_button_client_start:
-                makeToast("Yet to do...");
+                ClientSocket clientSocket = new ClientSocket(MainActivity.this,this);
+                clientSocket.execute();
                 break;
             case R.id.main_activity_button_client_stop:
                 makeToast("Yet to do...");

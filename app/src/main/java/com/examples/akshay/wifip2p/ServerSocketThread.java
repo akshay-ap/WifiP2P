@@ -22,8 +22,8 @@ public class ServerSocketThread extends AsyncTask<Void,Void,Void> {
     ServerSocket serverSocket;
     String receivedData = "null";
     private int port = 8888;
+    private boolean interrupted = false;
     public ServerSocketThread() {
-
     }
 
     @Override
@@ -32,20 +32,25 @@ public class ServerSocketThread extends AsyncTask<Void,Void,Void> {
 
             Log.d(ServerSocketThread.TAG," started DoInBackground");
             serverSocket = new ServerSocket(8888);
-            Socket client = serverSocket.accept();
 
-            Log.d(ServerSocketThread.TAG,"Accepted Connection");
-            InputStream inputstream = client.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
+            while (!interrupted) {
+                Socket client = serverSocket.accept();
+
+                Log.d(ServerSocketThread.TAG,"Accepted Connection");
+                InputStream inputstream = client.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputstream));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                Log.d(ServerSocketThread.TAG,"Completed ReceiveDataTask");
+                receivedData = sb.toString();
+                Log.d(ServerSocketThread.TAG," ================ " + receivedData);
             }
-            bufferedReader.close();
-            Log.d(ServerSocketThread.TAG,"Completed ReceiveDataTask");
-            receivedData = sb.toString();
             serverSocket.close();
+
             return null;
 
         } catch (IOException e) {
@@ -54,6 +59,16 @@ public class ServerSocketThread extends AsyncTask<Void,Void,Void> {
         }
         return null;
     }
+
+
+    public boolean isInterrupted() {
+        return interrupted;
+    }
+
+    public void setInterrupted(boolean interrupted) {
+        this.interrupted = interrupted;
+    }
+
 
 
 }
