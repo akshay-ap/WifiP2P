@@ -76,13 +76,6 @@
                 android:layout_height="wrap_content">
             </ListView>
 
-
-            <Button
-                android:id="@+id/main_activity_button_configure"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Configure" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

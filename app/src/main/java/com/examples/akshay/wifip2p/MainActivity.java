@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonClientStart;
     Button buttonClientStop;
     Button buttonServerStop;
-    Button buttonConfigure;
     EditText editTextTextInput;
 
     ServiceDiscovery serviceDisvcoery;
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonServerStop = findViewById(R.id.main_activity_button_server_stop);
         buttonClientStart = findViewById(R.id.main_activity_button_client_start);
         buttonClientStop = findViewById(R.id.main_activity_button_client_stop);
-        buttonConfigure = findViewById(R.id.main_activity_button_configure);
         listViewDevices = findViewById(R.id.main_activity_list_view_devices);
         textViewConnectionStatus = findViewById(R.id.main_activiy_textView_connection_status);
         textViewDiscoveryStatus = findViewById(R.id.main_activiy_textView_dicovery_status);
@@ -123,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonConnect.setOnClickListener(this);
         buttonDiscoveryStop.setOnClickListener(this);
         buttonDiscoveryStart.setOnClickListener(this);
-        buttonConfigure.setOnClickListener(this);
 
         buttonClientStop.setVisibility(View.INVISIBLE);
         buttonClientStart.setVisibility(View.INVISIBLE);
@@ -282,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case Constants.NETWORK_CONNECT:
                 stateConnection = true;
+                mManager.requestConnectionInfo(mChannel,this);
                 makeToast("It's a connect");
 
                 textViewConnectionStatus.setText("Connected");
@@ -341,9 +339,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String dataToSend = editTextTextInput.getText().toString();
                 ClientSocket clientSocket = new ClientSocket(MainActivity.this,this,dataToSend);
                 clientSocket.execute();
-                break;
-            case R.id.main_activity_button_configure:
-                mManager.requestConnectionInfo(mChannel,this);
                 break;
             case R.id.main_activity_button_client_stop:
                 makeToast("Yet to do");
